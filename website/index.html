@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>etm-cali finder for jmc expansion plan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="styles.css" />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css" rel="stylesheet" />
+</head>
+
+<body>
+    <nav id="menu"></nav>
+    <div id="map"></div>
+    <script>
+        mapboxgl.accessToken = "pk.eyJ1IjoiZ2Vvc3RydWN0dXJhIiwiYSI6ImNqZmoyZHlmdTBrYjYyeXBpZms3bW82YXQifQ.M5I7MuYxoyxMHR8WI41nlg";
+        var map = new mapboxgl.Map({
+            container: "map",
+            style: "mapbox://styles/geostructura/cjgy16w4600172rp3ww5w1yf3"
+        });
+        map.addControl(new mapboxgl.NavigationControl());
+        map.on("load", function() {
+            map.addLayer({
+                id: "query 1",
+                type: "fill",
+                source: {
+                    type: "geojson",
+                    data: "qr1.geojson",
+                },
+                layout: {},
+                paint: {
+                    "fill-color": "#088",
+                    "fill-opacity": 0.8,
+                },
+            });
+        });
+        map.on("load", function() {
+            map.addLayer({
+                id: "query 2",
+                type: "fill",
+                source: {
+                    type: "geojson",
+                    data: "qr2.geojson",
+                },
+                layout: {},
+                paint: {
+                    "fill-color": "#088",
+                    "fill-opacity": 0.8,
+                },
+            });
+        });
+        var toggleableLayerIds = ["query 1", "query 2"];
+
+        for (var i = 0; i < toggleableLayerIds.length; i++) {
+            var id = toggleableLayerIds[i];
+
+            var link = document.createElement("a");
+            link.href = "#";
+            link.className = "active";
+            link.textContent = id;
+
+            link.onclick = function(e) {
+                var clickedLayer = this.textContent;
+                e.preventDefault();
+                e.stopPropagation();
+
+                var visibility = map.getLayoutProperty(clickedLayer, "visibility");
+
+                if (visibility === "visible") {
+                    map.setLayoutProperty(clickedLayer, "visibility", "none");
+                    this.className = "";
+                } else {
+                    this.className = "active";
+                    map.setLayoutProperty(clickedLayer, "visibility", "visible");
+                }
+            };
+            var layers = document.getElementById("menu");
+            layers.appendChild(link);
+
+        }
+    </script>
+    <header>
+        <h1>Opportunity finder for JMC's Expansion Plan in Cali, Colombia</h1>
+    </header>
+    <div id="nav-side">
+        <h3>Data</h3>
+    </div>
+    <footer>
+        <h4>Desarrollado por GEOSTRUCTURA bajo autorización del Grupo PLT - Todos los derechos reservados ©</h4>
+        <ul>
+            <li>
+                <a href="https://www.aratiendas.com/" target="_blank"><img src="logo-ara.png"></a>
+            </li>
+            <li>
+                <a href="http://www.grupoplt.co/" target="_blank"><img src="logo-grupoplt.png"></a>
+            </li>
+            <li><img src="logo-gos.png"></li>
+        </ul>
+    </footer>
+</body>
+
+</html>
